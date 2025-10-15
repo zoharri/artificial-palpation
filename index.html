@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A proof of concept for artificial palpation.">
+  <meta name="keywords" content="Tactile, Palpation, Representation, Robotics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toward Artificial Palpation: Representation Learning of Touch on Soft Bodies</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://zoharri.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Toward Artificial Palpation <br> Representation Learning of Touch on Soft Bodies</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://zoharri.github.io/">Zohar Rimon</a>,</span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/elishafer/?originalSubdomain=il">Elisei Shafer</a>,</span>
+            <span class="author-block">
+              <a href="https://www.efratshimron.com/">Efrat Shimron</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/tal-tepper-bb5882132/">Tal Tepper</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://avivt.github.io/avivt/">Aviv Tamar</a>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Technion - Israel Institute of Technology</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="Coming Soon"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="Coming Soon"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="Coming Soon"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/zoharri/ArtificialPalpation"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="Coming Soon"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/reconstruction_videos/animation0.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        A proof-of-concept artificial palpation for breast cancer detection using tactile sensors.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-reconstruction0">
+          <video poster="" id="reconstruction0" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/reconstruction_videos/animation0.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-reconstruction1">
+          <video poster="" id="reconstruction1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/reconstruction_videos/animation1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-reconstruction2">
+          <video poster="" id="reconstruction2" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/reconstruction_videos/animation2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-reconstruction3">
+          <video poster="" id="reconstruction3" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/reconstruction_videos/animation3.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-reconstruction4">
+          <video poster="" id="reconstruction4" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/reconstruction_videos/animation4.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="toc">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+      
+      <h2 class="title is-3" style="text-align: center;">Table of Contents</h2>
+      
+      <div class="content">
+        <ul>
+          <li><a href="#abstract">Abstract</a></li>
+          <li><a href="#video">Video</a></li>
+          <li><a href="#fabrication">Object Fabrication</a></li>
+          <li>
+            <a href="#data-collection">Data Collection</a>
+            <ul>
+              <li><a href="#auto-poking">Automatic Poking
+              </a></li>
+              <li><a href="#mri-scan">MRI Scan</a></li>
+              <li><a href="#processed-mri">Processed MRI</a></li>
+            </ul>
+          </li>
+          <li><a href="#palpationsim">PalpationSim</a></li>
+          <li><a href="#bibtex">BibTeX</a></li>
+        </ul>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" id="abstract">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Palpation, the use of touch in medical examination, is almost exclusively performed by humans.
+            We investigate a proof of concept for an artificial palpation method based on self-supervised learning.
+            Our key idea is that an encoder-decoder framework can learn a \textit{representation} from a sequence of tactile measurements that contains all the relevant information about the palpated object. 
+            We conjecture that such a representation can be used for downstream tasks such as tactile imaging and change detection. With enough training data,  
+            it should capture intricate patterns in the tactile measurements that go beyond a simple map of forces -- the current state of the art. 
+            To validate our approach, we both develop a simulation environment and collect a real-world dataset of soft objects and corresponding ground truth images obtained by magnetic resonance imaging (MRI). 
+            We collect palpation sequences using a robot equipped with a tactile sensor, and train a model that predicts sensory readings at different positions on the object. 
+            We investigate the representation learned in this process, and demonstrate its use in imaging and change detection.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" id="video">Video</h2>
+        <div class="publication-video">
+          <iframe src="Coming Soon"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+  <div class="columns is-centered">
+
+  
+    <!-- Fabrication. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="fabrication">Object Fabrication</h2>
+        
+        <div class="content has-text-justified">
+          <p>
+            For better appreciation of the task difficulty, we created a special insert with a transparent gel instead of the regular one.
+            As can be seen in the video, the lump moves when touched, making it hard to infer properties regarding the hidden 3D model structure. Due to this dynamics, non-data-driven approaches often fail.
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <img src="./static/trans_insert/transinsert_robot.gif" alt="this slowpoke moves"  width="83%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/trans_insert/transinsert_hand.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!--/ Fabrication. -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+
+    <!-- Data Collection. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="data-collection">Data Collection</h2>
+        
+        <!-- Automatic Poking. -->
+        <h3 class="title is-4" id="auto-poking">Automatic Poking</h3>
+        <div class="content has-text-justified">
+          <p>
+            We use a robotic arm to automatically palpate our fabricated objects.
+            Using the QR code and a mounted camera, we can also associate appropriate ground-truth.   
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p11.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p12.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p13.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p21.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p22.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke/p23.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+        </div>
+        
+        <!-- Automatic Poking. -->
+
+        <!-- MRI Scan. -->
+        <h3 class="title is-4" id="mri-scan">MRI Scan</h3>
+        <div class="content has-text-justified">
+          <p>
+            Here, we visualize one of our MRI scans, where we run through the slices at different z values. 
+            As can be seen, we scanned 6 inserts at a time to save time and resources. 
+            
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/mri/6inserts__mri_gif.gif" alt="this slowpoke moves"  width="100%" />
+        </div>
+        <!--/ MRI Scan. -->
+        <!-- Processed MRI. -->
+        <h3 class="title is-4" id="processed-mri">Processed MRI</h3>
+        <div class="content has-text-justified">
+          <p>
+            In the preprocessing stage we present in the paper, we separate the scans and discretize them. 
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <iframe src="./static/mri/test_visualization_array_1.html" width="100%" height="500px" title="Description of embedded content"></iframe>
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <iframe src="./static/mri/test_visualization_array_2.html" width="100%" height="500px" title="Description of embedded content"></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <iframe src="./static/mri/test_visualization_array_3.html" width="100%" height="500px" title="Description of embedded content"></iframe>
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <iframe src="./static/mri/test_visualization_array_4.html" width="100%" height="500px" title="Description of embedded content"></iframe>
+            </div>
+          </div>
+        </div>
+        <!--/ Processed MRI. -->
+      </div>
+    </div>
+    <!--/ Data Collection. -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+  <div class="columns is-centered">
+
+  
+    <!-- PalationSim. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" id="palpationsim">PalpationSim</h2>
+        
+        <div class="content has-text-justified">
+          <p>
+            Here we show example videos of the poke trajectories from our proposed PalpationSim 
+          </p>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p11sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p12sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p13sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+        </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p21sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p22sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <img src="./static/poke_simulation/p23sim.gif" alt="this slowpoke moves"  width="100%" />
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!--/ PalpationSim. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title" id="bibtex">BibTeX</h2>
+    <pre><code>Coming Soon
+</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/zoharri/ArtificialPalpation" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Template is based on <a
+              href="https://github.com/nerfies/nerfies.github.io">github.com/nerfies/nerfies.github.io</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
